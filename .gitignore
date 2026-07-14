@@ -1,0 +1,15 @@
+# python
+backend/.venv/
+__pycache__/
+*.pyc
+backend/.env
+
+# runtime data (uploads, run outputs, checkpoints, demo db)
+backend/data/
+
+# node
+frontend/node_modules/
+frontend/dist/
+
+# misc
+.DS_Store
