@@ -156,6 +156,20 @@ GROUP BY p.prod_cat ORDER BY revenue DESC;`}</pre>
         </section>
       </Reveal>
 
+      {/* ── Research backing ─────────────────────────────── */}
+      <Reveal>
+        <section className="section research-strip">
+          <div className="research-quote">
+            “The semantic layer is the most important component of the entire pipeline — in every case.”
+          </div>
+          <div className="research-src">
+            From <b>Reimagining Text-to-SQL</b>, our survey of 97+ papers (2022–2025) on LLM
+            text-to-SQL architectures, authored at Domyn ·{" "}
+            <Link to="/team">read the key takeaways →</Link>
+          </div>
+        </section>
+      </Reveal>
+
       {/* ── Pipeline strip ───────────────────────────────── */}
       <Reveal>
         <section className="section">
