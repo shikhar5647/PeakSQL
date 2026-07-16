@@ -85,9 +85,13 @@ async def stream_events(run_id: str, after: int = 0):
         raise HTTPException(404, "run not found")
 
     async def gen():
+        # for already-finished runs, close after replaying the last stored event
+        # (covers restored runs whose log predates the run_finished event)
+        terminal = run.status not in ("pending", "running")
+        last_seq = run.events[-1].seq if terminal and run.events else None
         async for ev in run.subscribe(after_seq=after):
             yield f"id: {ev.seq}\ndata: {ev.to_json()}\n\n"
-            if ev.type == "run_finished":
+            if ev.type == "run_finished" or (last_seq is not None and ev.seq >= last_seq):
                 break
 
     return StreamingResponse(gen(), media_type="text/event-stream",
