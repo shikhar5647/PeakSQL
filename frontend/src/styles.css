@@ -793,3 +793,26 @@ h2.section { font-size: 13px; text-transform: uppercase; letter-spacing: 0.8px; 
 /* scroll reveal */
 .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.65s ease, transform 0.65s ease; }
 .reveal.in { opacity: 1; transform: none; }
+
+/* hero constellation animation layer */
+.hero-anim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.hero-anim svg { display: block; width: 100%; height: 100%; }
+.anim-label {
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  fill: var(--muted);
+  opacity: 0.55;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-anim { display: none; }
+  .demo-card { animation: none; }
+  .caret { animation: none; }
+}

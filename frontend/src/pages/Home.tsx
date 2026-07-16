@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import HeroConstellation from "../components/HeroConstellation";
 import { LogoMark } from "../components/Logo";
 import Reveal from "../components/Reveal";
 
@@ -18,6 +19,7 @@ export default function Home() {
     <div className="page landing">
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="hero hero2">
+        <HeroConstellation />
         <div className="hero-grid">
           <div className="hero-copy">
             <span className="hero-badge">
