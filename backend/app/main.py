@@ -4,8 +4,10 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .api.routes import router
 from .config import get_settings
+from .pipeline.events import run_manager
 
 app = FastAPI(title="PeakSQL", version="0.1.0")
+run_manager.restore_from_disk(get_settings().runs_dir)
 
 app.add_middleware(
     CORSMiddleware,

@@ -90,6 +90,43 @@ class RunManager:
     def __init__(self) -> None:
         self._runs: dict[str, RunRecord] = {}
 
+    def restore_from_disk(self, runs_dir) -> int:
+        """Reload persisted runs at startup so history survives server restarts."""
+        from pathlib import Path
+
+        restored = 0
+        for run_dir in sorted(Path(runs_dir).iterdir() if Path(runs_dir).exists() else []):
+            run_json = run_dir / "run.json"
+            if not run_json.exists() or run_dir.name in self._runs:
+                continue
+            try:
+                data = json.loads(run_json.read_text())
+                rec = RunRecord(
+                    run_id=data["runId"], created_at=int(data.get("createdAt", 0)),
+                    input_filename=data.get("inputFilename", "?"),
+                    input_type=data.get("inputType", "db"),
+                    llm_provider=data.get("llmProvider", "?"),
+                    status=data.get("status", "completed"), error=data.get("error"),
+                )
+                rec.agent_status = data.get("agents", {})
+                outputs = run_dir / "outputs.json"
+                if outputs.exists():
+                    rec.outputs = json.loads(outputs.read_text())
+                events = run_dir / "events.json"
+                if events.exists():
+                    rec.events = [PipelineEvent(**e) for e in json.loads(events.read_text())]
+                    rec._seq = max((e.seq for e in rec.events), default=0)
+                # runs persisted mid-flight by an interrupted server: settle their status
+                if rec.status in ("running", "pending"):
+                    rec.status = "completed" if "a13" in rec.outputs else "failed"
+                    if rec.status == "failed":
+                        rec.error = "interrupted — server stopped mid-run"
+                self._runs[rec.run_id] = rec
+                restored += 1
+            except Exception:  # noqa: BLE001 — a corrupt run dir must not block startup
+                continue
+        return restored
+
     def create(self, input_filename: str, input_type: str, llm_provider: str) -> RunRecord:
         run_id = uuid.uuid4().hex[:12]
         rec = RunRecord(run_id=run_id, created_at=now_ms(),

@@ -37,8 +37,6 @@ async def execute_run(run: RunRecord, input_path: str, options: dict[str, Any] |
                 config={"configurable": {"thread_id": run.run_id}, "recursion_limit": 50},
             )
 
-        _persist_outputs(settings, run)
-
         verdict = (final_state.get("a13") or {}).get("validation_report", {}).get("overall_status", "passed")
         if verdict == "failed":
             run.status = "failed"
@@ -49,10 +47,13 @@ async def execute_run(run: RunRecord, input_path: str, options: dict[str, Any] |
             run.status = "completed"
         run.emit("run_finished", status=run.status, validationStatus=verdict)
     except Exception as e:  # noqa: BLE001
-        _persist_outputs(settings, run)
         run.status = "failed"
         run.error = str(e)
         run.emit("run_finished", status="failed", error=str(e))
+    finally:
+        # persist LAST, so run.json carries the final status and events.json
+        # includes run_finished — restore_from_disk depends on both
+        _persist_outputs(settings, run)
 
 
 def _persist_outputs(settings, run: RunRecord) -> None:
@@ -60,3 +61,7 @@ def _persist_outputs(settings, run: RunRecord) -> None:
     run_dir.mkdir(parents=True, exist_ok=True)
     (run_dir / "outputs.json").write_text(json.dumps(run.outputs, default=str))
     (run_dir / "run.json").write_text(json.dumps(run.summary_json(), default=str))
+    (run_dir / "events.json").write_text(json.dumps(
+        [{"seq": e.seq, "run_id": e.run_id, "ts": e.ts, "type": e.type,
+          "agent_id": e.agent_id, "payload": e.payload} for e in run.events],
+        default=str))
