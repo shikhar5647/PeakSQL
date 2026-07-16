@@ -793,3 +793,80 @@ h2.section { font-size: 13px; text-transform: uppercase; letter-spacing: 0.8px; 
 /* scroll reveal */
 .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.65s ease, transform 0.65s ease; }
 .reveal.in { opacity: 1; transform: none; }
+
+/* hero constellation animation layer */
+.hero-anim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.hero-anim svg { display: block; width: 100%; height: 100%; }
+.anim-label {
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  fill: var(--muted);
+  opacity: 0.55;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-anim { display: none; }
+  .demo-card { animation: none; }
+  .caret { animation: none; }
+}
+
+/* research strip (Home) */
+.research-strip { text-align: center; padding-top: 30px; padding-bottom: 30px; }
+.research-quote {
+  font-size: clamp(19px, 2.6vw, 26px);
+  font-weight: 650;
+  font-style: italic;
+  letter-spacing: -0.2px;
+  max-width: 760px;
+  margin: 0 auto 14px;
+  background: linear-gradient(90deg, #9ec5f4, #9085e9);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.research-src { color: var(--muted); font-size: 13.5px; }
+.research-src b { color: var(--ink-2); }
+.research-src a { color: var(--seq-300); text-decoration: none; }
+.research-src a:hover { text-decoration: underline; }
+
+/* paper card (Team) */
+.paper-card {
+  margin-top: 26px;
+  border: 1px solid rgba(57, 135, 229, 0.4);
+  border-radius: 18px;
+  padding: 28px;
+  background:
+    radial-gradient(ellipse 60% 90% at 50% -30%, rgba(57, 135, 229, 0.12), transparent),
+    var(--surface-2);
+}
+.paper-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--seq-300);
+  border: 1px solid rgba(57, 135, 229, 0.45);
+  border-radius: 999px;
+  padding: 4px 12px;
+  margin-bottom: 14px;
+}
+.paper-title { margin: 0 0 6px; font-size: 20px; letter-spacing: -0.2px; }
+.paper-meta { color: var(--seq-300); font-size: 13px; font-weight: 600; margin-bottom: 12px; }
+.paper-abstract { color: var(--ink-2); font-size: 14px; line-height: 1.65; margin: 0 0 20px; }
+.takeaway-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+.takeaway {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+.tk-head { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+.tk-body { font-size: 13px; color: var(--ink-2); line-height: 1.55; }

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import HeroConstellation from "../components/HeroConstellation";
 import { LogoMark } from "../components/Logo";
 import Reveal from "../components/Reveal";
 
@@ -18,6 +19,7 @@ export default function Home() {
     <div className="page landing">
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="hero hero2">
+        <HeroConstellation />
         <div className="hero-grid">
           <div className="hero-copy">
             <span className="hero-badge">
@@ -150,6 +152,20 @@ GROUP BY p.prod_cat ORDER BY revenue DESC;`}</pre>
                 <li><span className="c">✓</span><span>Every agent decision is streamed, inspectable and validation-gated</span></li>
               </ul>
             </div>
+          </div>
+        </section>
+      </Reveal>
+
+      {/* ── Research backing ─────────────────────────────── */}
+      <Reveal>
+        <section className="section research-strip">
+          <div className="research-quote">
+            “The semantic layer is the most important component of the entire pipeline — in every case.”
+          </div>
+          <div className="research-src">
+            From <b>Reimagining Text-to-SQL</b>, our survey of 97+ papers (2022–2025) on LLM
+            text-to-SQL architectures, authored at Domyn ·{" "}
+            <Link to="/team">read the key takeaways →</Link>
           </div>
         </section>
       </Reveal>
